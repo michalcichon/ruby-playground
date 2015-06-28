@@ -10,7 +10,7 @@ def user_hash(user)
 end
 
 def create_insert_user(user)
-  return "INSERT INTO users (firstname, surname, email, password) VALUES ('#{user[:firstname]}', '#{user[:lastname]}', '#{user[:email]}', '#{user[:password]}')"
+  return "INSERT INTO users (firstname, surname, email, password) VALUES ('#{user[:firstname]}', '#{user[:lastname]}', '#{user[:email]}', '#{user[:password]}');"
 end
 
 if ARGV.empty?
@@ -25,6 +25,12 @@ unless File.exist?(filename)
   exit
 end
 
+sql_stms = Array.new
+
 CSV.foreach(filename, {col_sep:';'}) do |user|
-  puts create_insert_user(user_hash(user))
+  sql_stms.push create_insert_user(user_hash(user))
+end
+
+File.open(filename+".sql", "w+") do |f|
+  f.puts(sql_stms)
 end
