@@ -1,4 +1,5 @@
 require 'csv'
+require 'digest'
 
 def user_hash(user)
   return {
@@ -10,7 +11,8 @@ def user_hash(user)
 end
 
 def create_insert_user(user)
-  return "INSERT INTO users (firstname, surname, email, password) VALUES ('#{user[:firstname]}', '#{user[:lastname]}', '#{user[:email]}', '#{user[:password]}');"
+  password_md5 = Digest::MD5.hexdigest(user[:password])
+  return "INSERT INTO users (firstname, surname, email, password) VALUES ('#{user[:firstname]}', '#{user[:lastname]}', '#{user[:email]}', '#{password_md5}');"
 end
 
 if ARGV.empty?
